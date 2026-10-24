@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { profile } from '../../data/resume';
+import { url, formatDate } from '../../utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Base title={`${post.data.title}｜${profile.name}`} description={post.data.description}>
+  <article class="mx-auto max-w-3xl px-4 py-10 sm:py-14">
+    <a href={url('blog/')} class="no-print text-sm text-blue-600 hover:underline dark:text-blue-400">← 所有文章</a>
+    <h1 class="mt-4 mb-2 text-3xl leading-tight font-bold">{post.data.title}</h1>
+    <time datetime={post.data.date.toISOString()} class="text-sm text-stone-500 dark:text-neutral-400">
+      {formatDate(post.data.date)}
+    </time>
+    <div class="prose prose-stone mt-8 max-w-none dark:prose-invert prose-a:text-blue-600 dark:prose-a:text-blue-400">
+      <Content />
+    </div>
+  </article>
+</Base>

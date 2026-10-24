@@ -1,0 +1,65 @@
+---
+import { projects, projectCategories } from '../data/resume';
+
+const usedCategories = projectCategories.filter((c) => projects.some((p) => p.category === c.key));
+const filters = [{ key: 'all', label: '全部' }, ...usedCategories];
+---
+
+<section id="projects" class="py-10 print:py-2">
+  <div class="mx-auto max-w-5xl px-4">
+    <div class="mb-5 flex items-baseline justify-between gap-3 print:mb-2">
+      <h2 class="text-2xl font-bold">作品集</h2>
+      <span class="text-sm text-stone-500 dark:text-neutral-400">精選專案</span>
+    </div>
+
+    <div class:list={['no-print mb-4 flex flex-wrap gap-2', { hidden: usedCategories.length < 2 }]}>
+      {
+        filters.map((f, i) => (
+          <button
+            data-filter={f.key}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class="rounded-full border border-stone-200 bg-white px-3.5 py-1 text-sm text-stone-500 aria-pressed:border-stone-900 aria-pressed:bg-stone-900 aria-pressed:text-white dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400 dark:aria-pressed:border-neutral-100 dark:aria-pressed:bg-neutral-100 dark:aria-pressed:text-neutral-900"
+          >
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-2 print:gap-2">
+      {
+        projects.map((p) => (
+          <article data-cat={p.category} class="card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
+            <div class={`grid aspect-video place-items-center bg-gradient-to-br text-4xl print:hidden ${p.gradient}`}>{p.icon}</div>
+            <div class="flex flex-1 flex-col gap-2 px-5 pt-4 pb-5 print:gap-1 print:px-3 print:py-2">
+              <h3 class="text-[1.0625rem] font-bold">{p.title}</h3>
+              <p class="flex-1 text-sm text-stone-600 dark:text-neutral-400">{p.description}</p>
+              <div class="flex flex-wrap gap-2">{p.tags.map((t) => <span class="chip">{t}</span>)}</div>
+              {p.links.length > 0 && (
+                <div class="flex gap-4 text-sm font-medium">
+                  {p.links.map((l) => (
+                    <a class="text-blue-600 hover:underline dark:text-blue-400" href={l.url} target="_blank" rel="noopener">
+                      {l.label} →
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-cat]');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      const f = btn.dataset.filter;
+      cards.forEach((c) => c.classList.toggle('screen-hidden', f !== 'all' && c.dataset.cat !== f));
+    }),
+  );
+</script>

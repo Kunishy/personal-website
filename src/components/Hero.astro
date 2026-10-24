@@ -1,0 +1,50 @@
+---
+import { profile } from '../data/resume';
+import { url } from '../utils';
+---
+
+<section id="about" class="overflow-x-clip py-10 sm:py-16 print:pt-0 print:pb-3">
+  <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 md:grid-cols-[1fr_auto] md:gap-12 print:grid-cols-[1fr_auto] print:gap-6">
+    <!-- 大頭照：漸層外框＋柔光，手機置中、電腦放右側 -->
+    <div class="relative mx-auto w-40 sm:w-48 md:order-last md:w-60 print:order-last print:w-28">
+      <div
+        aria-hidden="true"
+        class="absolute -inset-6 rounded-full print:hidden bg-gradient-to-br from-blue-400/40 via-violet-400/35 to-pink-300/40 blur-2xl dark:from-blue-500/30 dark:via-violet-500/25 dark:to-pink-400/25"
+      >
+      </div>
+      <div class="relative rounded-full bg-gradient-to-br from-blue-600 via-violet-500 to-pink-400 p-1.5 shadow-xl shadow-violet-500/20">
+        {
+          profile.avatar ? (
+            <img
+              src={url(profile.avatar)}
+              alt={profile.name}
+              width="640"
+              height="640"
+              class="aspect-square w-full rounded-full border-4 border-white object-cover dark:border-neutral-950"
+            />
+          ) : (
+            <div class="grid aspect-square w-full place-items-center rounded-full border-4 border-white bg-gradient-to-br from-blue-600 to-violet-500 text-6xl font-bold text-white dark:border-neutral-950">
+              {profile.initial}
+            </div>
+          )
+        }
+      </div>
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold sm:text-4xl">{profile.name}</h1>
+      <p class="mt-1.5 mb-3 text-lg font-medium text-blue-600 dark:text-blue-400">{profile.role}</p>
+      <p class="mb-5 max-w-[60ch] text-stone-600 dark:text-neutral-400">{profile.bio}</p>
+      <div class="mb-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-stone-600 dark:text-neutral-400">
+        <span>📍 {profile.location}</span>
+        <span>✉️ <a class="text-blue-600 hover:underline dark:text-blue-400" href={`mailto:${profile.email}`}>{profile.email}</a></span>
+        <span>🎓 {profile.graduation}</span>
+      </div>
+      <div class="no-print flex flex-wrap gap-2.5">
+        <a class="btn btn-primary" href="#experience">查看履歷</a>
+        <button class="btn" onclick="window.print()">下載 PDF</button>
+        {profile.links.github && <a class="btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>}
+        {profile.links.linkedin && <a class="btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>}
+      </div>
+    </div>
+  </div>
+</section>

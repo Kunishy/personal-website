@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* 用 <html class="dark"> 控制深色模式（右上角按鈕切換） */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Noto Sans TC", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@utility card {
+  @apply rounded-2xl border border-stone-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900;
+}
+
+@utility chip {
+  @apply rounded-full bg-blue-50 px-2.5 py-0.5 text-[0.8125rem] text-blue-700 dark:bg-blue-950 dark:text-blue-300;
+}
+
+@utility btn {
+  @apply inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-4 py-2 text-[0.9375rem] font-medium text-stone-900 transition hover:bg-stone-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800;
+}
+
+@utility btn-primary {
+  @apply border-blue-600 bg-blue-600 text-white hover:bg-blue-700 dark:border-blue-500 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+}
+
+/* 經歷分頁與作品篩選：只在螢幕上隱藏，紙本上全部展開 */
+@media screen {
+  .screen-hidden {
+    display: none !important;
+  }
+}
+
+/* 列印：按「下載 PDF」時輸出精簡的 A4 紙本履歷（各元件另有 print: 樣式） */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html {
+    font-size: 11px;
+  }
+  body {
+    background: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  h2 {
+    break-after: avoid;
+  }
+}

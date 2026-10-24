@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { profile } from '../../data/resume';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base title={`文章｜${profile.name}`}>
+  <section class="py-10 sm:py-14">
+    <div class="mx-auto max-w-3xl px-4">
+      <h1 class="mb-2 text-3xl font-bold">文章</h1>
+      <p class="mb-8 text-stone-600 dark:text-neutral-400">研究筆記、技術分享與研究生活。共 {posts.length} 篇。</p>
+      <PostList posts={posts} />
+    </div>
+  </section>
+</Base>

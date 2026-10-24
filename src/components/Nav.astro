@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import { profile } from '../data/resume';
+import { url } from '../utils';
+
+const hasPosts = (await getCollection('blog', ({ data }) => !data.draft)).length > 0;
+
+const links = [
+  { href: url('#about'), label: '關於' },
+  { href: url('#experience'), label: '經歷' },
+  { href: url('#skills'), label: '技能' },
+  { href: url('#projects'), label: '作品' },
+  ...(hasPosts ? [{ href: url('blog/'), label: '文章' }] : []),
+  { href: url('#contact'), label: '聯絡' },
+];
+---
+
+<header class="no-print sticky top-0 z-20 border-b border-stone-200 bg-stone-50/85 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/85">
+  <div class="mx-auto flex h-15 max-w-5xl items-center justify-between px-4">
+    <a href={url()} class="font-bold">{profile.name}</a>
+
+    <nav
+      id="nav-links"
+      class="absolute inset-x-0 top-15 hidden flex-col border-b border-stone-200 bg-white px-4 pt-2 pb-3 md:static md:flex md:flex-row md:items-center md:gap-1 md:border-0 md:bg-transparent md:p-0 dark:border-neutral-800 dark:bg-neutral-900 md:dark:bg-transparent"
+    >
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class="rounded-lg px-3 py-3 text-stone-600 hover:bg-blue-50 hover:text-stone-900 md:py-1.5 md:text-[0.9375rem] dark:text-neutral-400 dark:hover:bg-blue-950 dark:hover:text-neutral-100 [&.active]:bg-blue-50 [&.active]:text-stone-900 dark:[&.active]:bg-blue-950 dark:[&.active]:text-neutral-100"
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex gap-2">
+      <button id="theme-btn" class="btn size-9.5 justify-center p-0" aria-label="切換深淺色">◐</button>
+      <button id="menu-btn" class="btn size-9.5 justify-center p-0 md:hidden" aria-label="開啟選單" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.getElementById('nav-links')!;
+  const menuBtn = document.getElementById('menu-btn')!;
+
+  const setMenu = (open: boolean) => {
+    nav.classList.toggle('hidden', !open);
+    nav.classList.toggle('flex', open);
+    menuBtn.textContent = open ? '✕' : '☰';
+    menuBtn.setAttribute('aria-expanded', String(open));
+  };
+  menuBtn.addEventListener('click', () => setMenu(nav.classList.contains('hidden')));
+  nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  document.getElementById('theme-btn')!.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch {}
+  });
+
+  // 列印時一律用淺色，印完再還原
+  let wasDark = false;
+  addEventListener('beforeprint', () => {
+    wasDark = document.documentElement.classList.contains('dark');
+    document.documentElement.classList.remove('dark');
+  });
+  addEventListener('afterprint', () => {
+    if (wasDark) document.documentElement.classList.add('dark');
+  });
+
+  // 首頁捲動時標示目前所在區塊
+  const navLinks = [...nav.querySelectorAll('a')];
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const en of entries) {
+        if (!en.isIntersecting) continue;
+        navLinks.forEach((l) => l.classList.toggle('active', l.hash === `#${en.target.id}`));
+      }
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
+  );
+  document.querySelectorAll('main section[id]').forEach((s) => observer.observe(s));
+</script>

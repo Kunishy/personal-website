@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url, formatDate } from '../utils';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="grid gap-3">
+  {
+    posts.map((post) => (
+      <a
+        href={url(`blog/${post.id}/`)}
+        class="card grid gap-x-4 gap-y-1 px-5 py-4 transition hover:border-blue-500 sm:grid-cols-[1fr_auto]"
+      >
+        <h3 class="text-[1.0625rem] font-bold">{post.data.title}</h3>
+        <time datetime={post.data.date.toISOString()} class="-order-1 text-sm text-stone-500 sm:order-none dark:text-neutral-400">
+          {formatDate(post.data.date)}
+        </time>
+        <p class="text-sm text-stone-600 sm:col-span-2 dark:text-neutral-400">{post.data.description}</p>
+      </a>
+    ))
+  }
+</div>

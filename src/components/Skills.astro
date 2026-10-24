@@ -1,0 +1,47 @@
+---
+import { skills } from '../data/resume';
+
+const chipGroups = [
+  { title: '工具與框架', items: skills.tools },
+  { title: '證照', items: skills.others },
+  { title: '興趣與其他', items: skills.hobbies },
+].filter((g) => g.items.length > 0);
+---
+
+<section id="skills" class="py-10 print:py-2">
+  <div class="mx-auto max-w-5xl px-4">
+    <h2 class="mb-5 text-2xl font-bold print:mb-2">技能</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 print:gap-2">
+      {
+        skills.languages.length > 0 && (
+          <div class="card px-5 py-4 print:px-3 print:py-2">
+            <h3 class="mb-3 font-bold">程式語言</h3>
+            {skills.languages.map((s) => (
+              <div class="mb-2.5 text-sm">
+                <div class="flex justify-between text-stone-600 dark:text-neutral-400">
+                  <span>{s.name}</span>
+                  <span>{s.level}</span>
+                </div>
+                <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-800">
+                  <div class="h-full rounded-full bg-blue-600 dark:bg-blue-400" style={`width:${s.value}%`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+      {
+        chipGroups.map((g) => (
+          <div class="card px-5 py-4 print:px-3 print:py-2">
+            <h3 class="mb-3 font-bold">{g.title}</h3>
+            <div class="flex flex-wrap gap-2">
+              {g.items.map((t) => (
+                <span class="chip">{t}</span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
