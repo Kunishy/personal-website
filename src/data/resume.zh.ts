@@ -14,12 +14,14 @@ const zh: LocalizedResume = {
     graduation: '碩士 2027 年 8 月畢業（預計）',
   },
 
-  work: [
+  // 經歷：實習、學生新創、打工，依時間由近到遠排列
+  // 學生新創的 org 格式為「團隊 · 領域 · 學生新創團隊」
+  experience: [
     {
-      title: 'Java 課程助教',
-      org: '國立臺灣海洋大學',
-      date: '2026.02 – 2026.06',
-      points: [],
+      title: 'PM / 商業模式',
+      org: 'CasDoc · SaaS · 學生新創團隊',
+      date: '2025.06 – 2026.02',
+      points: ['入選 FITI 創新創業激勵計畫', '負責產品管理', '規劃商業模式'],
     },
     {
       title: '測試工程師（實習）',
@@ -30,28 +32,6 @@ const zh: LocalizedResume = {
         '使用 Jira 管理缺陷生命週期，缺陷追蹤至修復結案',
         '量化測試進度並產出報表，協助專案時程控管',
       ],
-    },
-    {
-      title: 'Python 程式設計入門課程助教',
-      org: '國立臺灣海洋大學',
-      date: '2023.09 – 2024.01',
-      points: ['批改作業', '配合教授調整作業內容'],
-    },
-    {
-      title: '數學理化輔導老師',
-      org: '新華文補習班',
-      date: '2021.01 – 2023.06',
-      points: ['批改考卷', '課後輔導', '代課'],
-    },
-  ],
-
-  // org 格式為「團隊 · 領域 · 學生新創團隊」
-  startups: [
-    {
-      title: 'PM / 商業模式',
-      org: 'CasDoc · SaaS · 學生新創團隊',
-      date: '2025.06 – 2026.02',
-      points: ['入選 FITI 創新創業激勵計畫', '負責產品管理', '規劃商業模式'],
     },
     {
       title: 'PM / 開發',
@@ -65,6 +45,12 @@ const zh: LocalizedResume = {
       date: '2024.12 – 2025.11',
       points: ['入選 U-start 創新創業計畫第一階段', '負責產品規劃與需求管理', '負責產品測試與品質把關', '負責團隊提案簡報（Pitch）'],
     },
+    {
+      title: '數學理化輔導老師',
+      org: '新華文補習班',
+      date: '2021.01 – 2023.06',
+      points: ['批改考卷', '課後輔導', '代課'],
+    },
   ],
 
   education: [
@@ -72,25 +58,19 @@ const zh: LocalizedResume = {
       title: '資訊工程 碩士',
       org: '國立臺灣海洋大學',
       date: '2025.09 – 2027.08（預計）',
-      points: ['論文：基於 EventStorming 與大型語言模型之工作流程分析與領域模型建構方法'],
+      points: [
+        '論文：基於 EventStorming 與大型語言模型之工作流程分析與領域模型建構方法',
+        'Java 課程助教（2026.02 – 2026.06）',
+      ],
     },
     {
       title: '資訊工程 學士',
       org: '國立臺灣海洋大學',
       date: '2021 – 2025',
-      points: ['畢業專題「讓每張臉露出真面目」：深偽人臉篡改偵測系統，獲 113 年資工系專題競賽優等'],
-    },
-    {
-      title: '高中',
-      org: '國立基隆女子高級中學',
-      date: '2018 – 2021',
-      points: [],
-    },
-    {
-      title: '國中',
-      org: '基隆市立銘傳國民中學',
-      date: '2015 – 2018',
-      points: ['第 57 屆全國中小學科展 化學科「最佳團隊合作獎」'],
+      points: [
+        '畢業專題「讓每張臉露出真面目」：深偽人臉篡改偵測系統，獲 113 年資工系專題競賽優等',
+        'Python 程式設計入門課程助教（2023.09 – 2024.01）：批改作業、配合教授調整作業內容',
+      ],
     },
   ],
 
@@ -140,16 +120,6 @@ const zh: LocalizedResume = {
       icon: '🎭',
       gradient: 'from-fuchsia-500 to-indigo-600',
       links: [{ label: '得獎公告', url: 'https://cse.ntou.edu.tw/p/406-1063-108673,r1034.php?Lang=zh-tw' }],
-    },
-    {
-      title: '「氯」化了沒？烏濕一把罩',
-      description:
-        '探討氯化亞鐵和氯化鐵在課堂實驗的可行性。第 57 屆全國中小學科展（民國 106 年）化學科，獲最佳團隊合作獎；與林肯韞共同完成，指導老師陳金善。',
-      category: 'award',
-      tags: ['化學', '氯化亞鐵', '雙氧水', '亞甲藍液'],
-      icon: '🧪',
-      gradient: 'from-emerald-500 to-teal-500',
-      links: [{ label: '科展作品頁', url: 'https://www.ntsec.edu.tw/science/detail.aspx?a=21&cat=82&sid=13558' }],
     },
     {
       title: '個人網站',

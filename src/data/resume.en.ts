@@ -14,12 +14,14 @@ const en: LocalizedResume = {
     graduation: 'M.S. expected Aug 2027',
   },
 
-  work: [
+  // Experience: internship, student startups, part-time work — newest first
+  // Student startup org format: "Team · Field · Student startup team"
+  experience: [
     {
-      title: 'Teaching Assistant, Java Programming',
-      org: 'National Taiwan Ocean University',
-      date: '2026.02 – 2026.06',
-      points: [],
+      title: 'PM / Business Model',
+      org: 'CasDoc · SaaS · Student startup team',
+      date: '2025.06 – 2026.02',
+      points: ['Selected for the FITI entrepreneurship program', 'Led product management', 'Designed the business model'],
     },
     {
       title: 'Test Engineer Intern',
@@ -30,28 +32,6 @@ const en: LocalizedResume = {
         'Managed the defect lifecycle in Jira, tracking each defect through to resolution',
         'Quantified testing progress and produced reports to support project schedule control',
       ],
-    },
-    {
-      title: 'Teaching Assistant, Introduction to Python Programming',
-      org: 'National Taiwan Ocean University',
-      date: '2023.09 – 2024.01',
-      points: ['Graded assignments', 'Adjusted assignment content with the professor'],
-    },
-    {
-      title: 'Math and Science Tutor',
-      org: 'Hsin Hua Wen Cram School', // TODO 確認：補習班英文名稱
-      date: '2021.01 – 2023.06',
-      points: ['Graded exams', 'Provided after-class tutoring', 'Substitute teaching'],
-    },
-  ],
-
-  // org 格式為「Team · Field · Student startup team」
-  startups: [
-    {
-      title: 'PM / Business Model',
-      org: 'CasDoc · SaaS · Student startup team',
-      date: '2025.06 – 2026.02',
-      points: ['Selected for the FITI entrepreneurship program', 'Led product management', 'Designed the business model'],
     },
     {
       title: 'PM / Developer',
@@ -70,6 +50,12 @@ const en: LocalizedResume = {
         'Delivered team pitches',
       ],
     },
+    {
+      title: 'Math and Science Tutor',
+      org: 'Hsin Hua Wen Cram School', // TODO 確認：補習班英文名稱
+      date: '2021.01 – 2023.06',
+      points: ['Graded exams', 'Provided after-class tutoring', 'Substitute teaching'],
+    },
   ],
 
   education: [
@@ -80,6 +66,7 @@ const en: LocalizedResume = {
       points: [
         // TODO 確認：論文的正式英文題目
         'Thesis: Workflow Analysis and Domain Model Construction Based on EventStorming and Large Language Models',
+        'Teaching Assistant, Java Programming (2026.02 – 2026.06)',
       ],
     },
     {
@@ -88,19 +75,8 @@ const en: LocalizedResume = {
       date: '2021 – 2025',
       points: [
         'Capstone project "Unmasking Every Face", a deepfake face-forgery detection system; Excellence Award, 2024 Department Project Competition',
+        'Teaching Assistant, Introduction to Python Programming (2023.09 – 2024.01): graded assignments and adjusted assignment content with the professor',
       ],
-    },
-    {
-      title: 'High School',
-      org: "National Keelung Girls' Senior High School",
-      date: '2018 – 2021',
-      points: [],
-    },
-    {
-      title: 'Junior High School',
-      org: 'Keelung Municipal Ming Chuan Junior High School',
-      date: '2015 – 2018',
-      points: ['Best Teamwork Award, Chemistry, 57th National Primary and High School Science Fair'],
     },
   ],
 
@@ -155,16 +131,6 @@ const en: LocalizedResume = {
       icon: '🎭',
       gradient: 'from-fuchsia-500 to-indigo-600',
       links: [{ label: 'Award announcement', url: 'https://cse.ntou.edu.tw/p/406-1063-108673,r1034.php?Lang=zh-tw' }],
-    },
-    {
-      title: 'Ferrous and Ferric Chloride in Classroom Experiments',
-      description:
-        'Studied the feasibility of using ferrous chloride and ferric chloride in classroom experiments. Best Teamwork Award, Chemistry, 57th National Primary and High School Science Fair (2017); co-authored with Ken-Yun Lin, advised by Chin-Shan Chen.', // TODO 確認：組員與老師英文名
-      category: 'award',
-      tags: ['Chemistry', 'Ferrous Chloride', 'Hydrogen Peroxide', 'Methylene Blue'],
-      icon: '🧪',
-      gradient: 'from-emerald-500 to-teal-500',
-      links: [{ label: 'Science fair entry', url: 'https://www.ntsec.edu.tw/science/detail.aspx?a=21&cat=82&sid=13558' }],
     },
     {
       title: 'Personal Website',

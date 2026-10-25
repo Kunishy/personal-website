@@ -6,10 +6,16 @@
 
 @theme {
   --font-sans: "Noto Sans TC", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* 淺色模式的米色紙張配色（護眼、低彩度） */
+  --color-paper: #f4efe6; /* 頁面背景 */
+  --color-paper-card: #faf7f1; /* 卡片、按鈕 */
+  --color-paper-hover: #efe8db; /* 按鈕滑過 */
+  --color-paper-line: #e6dfd1; /* 邊框、分隔線 */
 }
 
 @utility card {
-  @apply rounded-2xl border border-stone-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900;
+  @apply rounded-2xl border border-paper-line bg-paper-card shadow-sm dark:border-neutral-800 dark:bg-neutral-900;
 }
 
 @utility chip {
@@ -17,7 +23,7 @@
 }
 
 @utility btn {
-  @apply inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-4 py-2 text-[0.9375rem] font-medium text-stone-900 transition hover:bg-stone-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800;
+  @apply inline-flex items-center gap-1.5 rounded-xl border border-paper-line bg-paper-card px-4 py-2 text-[0.9375rem] font-medium text-stone-900 transition hover:bg-paper-hover dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800;
 }
 
 @utility btn-primary {

@@ -31,8 +31,7 @@ export type LocalizedResume = {
     location: string;
     graduation: string;
   };
-  work: TimelineItem[];
-  startups: TimelineItem[];
+  experience: TimelineItem[];
   education: TimelineItem[];
   skills: {
     // 熟練度 value 為 0–100，決定長條長度

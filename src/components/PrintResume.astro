@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const { profile, work, startups, education, projects, projectCategories, skills } = getResume(lang);
+const { profile, experience, education, projects, projectCategories, skills } = getResume(lang);
 const ui = t(lang).print;
 
 type Entry = { head: string; right: string; sub: string; points: string[] };
@@ -25,13 +25,9 @@ const sections: { title: string; entries: Entry[] }[] = [
     entries: education.map((e) => ({ head: e.org, right: e.date, sub: e.title, points: compact(e.points) })),
   },
   {
-    title: ui.work,
-    entries: work.map((e) => ({ head: e.org, right: e.date, sub: e.title, points: compact(e.points) })),
-  },
-  {
-    title: ui.startups,
-    // org 格式為「團隊 · 領域 · 學生新創團隊」：粗體只放團隊名，其餘併入斜體副標
-    entries: startups.map((e) => {
+    title: ui.experience,
+    // 學生新創的 org 格式為「團隊 · 領域 · 學生新創團隊」：粗體只放團隊名，其餘併入斜體副標
+    entries: experience.map((e) => {
       const [team, ...rest] = e.org.split(' · ');
       return { head: team, right: e.date, sub: [e.title, ...rest].join(lang === 'zh' ? '｜' : ' | '), points: compact(e.points) };
     }),
@@ -111,13 +107,13 @@ const contact = [
 </div>
 
 <script>
-  // 列印版平常是隱藏的，先把它用到的襯線字型載好，列印時才不會退回預設字型
+  // 列印版平常是隱藏的，先把它用到的字型字元載好，列印時才不會退回預設字型
   const el = document.getElementById('print-resume');
   if (el && document.fonts) {
     const text = el.textContent ?? '';
     const load = () => {
-      document.fonts.load('400 1em "Noto Serif TC"', text);
-      document.fonts.load('700 1em "Noto Serif TC"', text);
+      document.fonts.load('400 1em "Noto Sans TC"', text);
+      document.fonts.load('700 1em "Noto Sans TC"', text);
     };
     'requestIdleCallback' in window ? requestIdleCallback(load) : setTimeout(load, 1000);
   }
@@ -132,7 +128,7 @@ const contact = [
     .print-resume {
       display: block;
       color: #000;
-      font-family: 'Noto Serif TC', 'Times New Roman', serif;
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
       font-size: 10pt;
       line-height: 1.4;
     }

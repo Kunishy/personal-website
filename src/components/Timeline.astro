@@ -7,13 +7,12 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const { work, startups, education } = getResume(lang);
+const { experience, education } = getResume(lang);
 const ui = t(lang);
 
 const panels = (
   [
-    { key: 'work', label: ui.tabs.work, items: work },
-    { key: 'startup', label: ui.tabs.startup, items: startups },
+    { key: 'experience', label: ui.tabs.experience, items: experience },
     { key: 'edu', label: ui.tabs.edu, items: education },
   ] satisfies { key: string; label: string; items: TimelineItem[] }[]
 ).filter((p) => p.items.length > 0);
@@ -23,7 +22,7 @@ const panels = (
   <div class="mx-auto max-w-5xl px-4">
     <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
       <h2 class="text-2xl font-bold">{ui.experience}</h2>
-      <div class="no-print inline-flex rounded-xl border border-stone-200 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-900" role="tablist">
+      <div class="no-print inline-flex rounded-xl border border-paper-line bg-paper-card p-1 dark:border-neutral-800 dark:bg-neutral-900" role="tablist">
         {
           panels.map((p, i) => (
             <button
@@ -44,10 +43,10 @@ const panels = (
         <>
           <ol
             data-tl-panel={p.key}
-            class:list={[{ 'screen-hidden': i !== 0 }, 'relative before:absolute before:top-2 before:bottom-2 before:left-[7px] before:w-0.5 before:bg-stone-200 dark:before:bg-neutral-800']}
+            class:list={[{ 'screen-hidden': i !== 0 }, 'relative before:absolute before:top-2 before:bottom-2 before:left-[7px] before:w-0.5 before:bg-paper-line dark:before:bg-neutral-800']}
           >
             {p.items.map((item) => (
-              <li class="relative mb-4 pl-9 before:absolute before:top-[22px] before:left-0 before:size-4 before:rounded-full before:border-[3px] before:border-blue-600 before:bg-white dark:before:border-blue-400 dark:before:bg-neutral-950">
+              <li class="relative mb-4 pl-9 before:absolute before:top-[22px] before:left-0 before:size-4 before:rounded-full before:border-[3px] before:border-blue-600 before:bg-paper-card dark:before:border-blue-400 dark:before:bg-neutral-950">
                 <div class="card px-5 py-4">
                 <div class="flex flex-wrap justify-between gap-x-3 gap-y-1">
                   <h3 class="text-[1.0625rem] font-bold">{item.title}</h3>
