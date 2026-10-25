@@ -109,13 +109,23 @@ const contact = [
 <script>
   // 列印版平常是隱藏的，先把它用到的字型字元載好，列印時才不會退回預設字型
   const el = document.getElementById('print-resume');
-  if (el && document.fonts) {
+  const loadFonts = () => {
+    if (!el || !document.fonts) return Promise.resolve();
     const text = el.textContent ?? '';
-    const load = () => {
-      document.fonts.load('400 1em "Noto Sans TC"', text);
-      document.fonts.load('700 1em "Noto Sans TC"', text);
-    };
-    'requestIdleCallback' in window ? requestIdleCallback(load) : setTimeout(load, 1000);
+    return Promise.all([
+      document.fonts.load('400 1em "Noto Sans TC"', text),
+      document.fonts.load('700 1em "Noto Sans TC"', text),
+    ]).catch(() => {});
+  };
+
+  // 從另一個語言頁按「下載履歷」時，網址會帶 ?print：載入後自動列印，印完關閉分頁
+  if (new URLSearchParams(location.search).has('print')) {
+    history.replaceState(null, '', location.pathname + location.hash);
+    addEventListener('afterprint', () => window.opener && window.close(), { once: true });
+    const printWhenReady = () => loadFonts().then(() => setTimeout(() => window.print(), 300));
+    document.readyState === 'complete' ? printWhenReady() : addEventListener('load', printWhenReady, { once: true });
+  } else {
+    'requestIdleCallback' in window ? requestIdleCallback(loadFonts) : setTimeout(loadFonts, 1000);
   }
 </script>
 
