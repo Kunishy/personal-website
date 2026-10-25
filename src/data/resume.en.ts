@@ -74,8 +74,8 @@ const en: LocalizedResume = {
       org: 'National Taiwan Ocean University',
       date: '2021 – 2025',
       points: [
-        'Capstone project "Unmasking Every Face", a deepfake face-forgery detection system; Excellence Award, 2024 Department Project Competition',
-        'Teaching Assistant, Introduction to Python Programming (2023.09 – 2024.01): graded assignments and adjusted assignment content with the professor',
+        'Capstone project "Unmasking Every Face": a deepfake face-forgery detection system\nExcellence Award, 2024 Department Project Competition',
+        'Teaching Assistant, Introduction to Python Programming (2023.09 – 2024.01)',
       ],
     },
   ],

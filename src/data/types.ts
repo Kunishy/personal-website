@@ -6,7 +6,7 @@ export type TimelineItem = {
   title: string;
   org: string;
   date: string;
-  points: string[];
+  points: string[]; // 同一點內要換行時用 \n
 };
 
 export type ProjectCategoryKey = 'research' | 'award' | 'data' | 'web';
