@@ -1,0 +1,189 @@
+---
+// 列印專用的傳統履歷版型（螢幕上隱藏，按「下載 PDF」列印時才顯示）
+import { getResume, type Lang } from '../data/resume';
+import { t } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile, work, startups, education, projects, projectCategories, skills } = getResume(lang);
+const ui = t(lang).print;
+
+type Entry = { head: string; right: string; sub: string; points: string[] };
+
+const categoryLabel = (key: string) => projectCategories.find((c) => c.key === key)?.label ?? '';
+
+// 中文每點都很短（例如「批改作業」）時合併成一行，節省版面
+const compact = (points: string[]) =>
+  lang === 'zh' && points.length > 1 && points.every((p) => p.length <= 8) ? [points.join(ui.listSep)] : points;
+
+const sections: { title: string; entries: Entry[] }[] = [
+  {
+    title: ui.education,
+    entries: education.map((e) => ({ head: e.org, right: e.date, sub: e.title, points: compact(e.points) })),
+  },
+  {
+    title: ui.work,
+    entries: work.map((e) => ({ head: e.org, right: e.date, sub: e.title, points: compact(e.points) })),
+  },
+  {
+    title: ui.startups,
+    // org 格式為「團隊 · 領域 · 學生新創團隊」：粗體只放團隊名，其餘併入斜體副標
+    entries: startups.map((e) => {
+      const [team, ...rest] = e.org.split(' · ');
+      return { head: team, right: e.date, sub: [e.title, ...rest].join(lang === 'zh' ? '｜' : ' | '), points: compact(e.points) };
+    }),
+  },
+  {
+    title: ui.projects,
+    entries: projects.map((p) => ({
+      head: p.title,
+      right: '',
+      sub: categoryLabel(p.category),
+      points: [p.description, `${ui.keywords}${p.tags.join(ui.listSep)}`],
+    })),
+  },
+].filter((s) => s.entries.length > 0);
+
+const skillLines = [
+  { label: ui.tools, items: skills.tools },
+  { label: ui.others, items: skills.others },
+  { label: ui.hobbies, items: skills.hobbies.map((h) => h.replace(/^\p{Extended_Pictographic}\s*/u, '')) },
+].filter((l) => l.items.length > 0);
+
+// 部署到 GitHub Pages 時才印出網站網址（本機預覽不印 localhost）
+const siteUrl = Astro.site && !Astro.site.hostname.includes('localhost')
+  ? new URL(import.meta.env.BASE_URL, Astro.site).href.replace(/^https?:\/\//, '').replace(/\/$/, '')
+  : '';
+
+const contact = [
+  profile.email,
+  profile.location,
+  siteUrl,
+  profile.links.github.replace(/^https?:\/\//, ''),
+  profile.links.linkedin.replace(/^https?:\/\//, ''),
+].filter(Boolean);
+---
+
+<div id="print-resume" class="print-resume">
+  <header>
+    <h1>{profile.name}</h1>
+    <p class="contact">{contact.join(lang === 'zh' ? '　｜　' : '  |  ')}</p>
+  </header>
+
+  {
+    sections.map((s) => (
+      <section>
+        <h2>{s.title}</h2>
+        {s.entries.map((e) => (
+          <div class="entry">
+            <div class="row">
+              <span class="head">{e.head}</span>
+              {e.right && <span class="right">{e.right}</span>}
+            </div>
+            {e.sub && <div class="sub">{e.sub}</div>}
+            {e.points.length > 0 && (
+              <ul>
+                {e.points.map((pt) => (
+                  <li>{pt}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </section>
+    ))
+  }
+
+  <section>
+    <h2>{ui.skills}</h2>
+    {
+      skillLines.map((l) => (
+        <p class="skill">
+          <b>{l.label}{ui.colon}</b>
+          {l.items.join(ui.listSep)}
+        </p>
+      ))
+    }
+  </section>
+</div>
+
+<script>
+  // 列印版平常是隱藏的，先把它用到的襯線字型載好，列印時才不會退回預設字型
+  const el = document.getElementById('print-resume');
+  if (el && document.fonts) {
+    const text = el.textContent ?? '';
+    const load = () => {
+      document.fonts.load('400 1em "Noto Serif TC"', text);
+      document.fonts.load('700 1em "Noto Serif TC"', text);
+    };
+    'requestIdleCallback' in window ? requestIdleCallback(load) : setTimeout(load, 1000);
+  }
+</script>
+
+<style>
+  .print-resume {
+    display: none;
+  }
+
+  @media print {
+    .print-resume {
+      display: block;
+      color: #000;
+      font-family: 'Noto Serif TC', 'Times New Roman', serif;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 6pt;
+    }
+    h1 {
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin: 0;
+    }
+    .contact {
+      font-size: 9.5pt;
+      margin: 3pt 0 0;
+    }
+    h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      border-bottom: 1.2pt solid #000;
+      padding-bottom: 1.5pt;
+      margin: 10pt 0 5pt;
+      break-after: avoid;
+    }
+    .entry {
+      margin-bottom: 6pt;
+      break-inside: avoid;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12pt;
+    }
+    .head {
+      font-weight: 700;
+    }
+    .right {
+      white-space: nowrap;
+    }
+    .sub {
+      font-style: italic;
+    }
+    ul {
+      list-style: disc;
+      margin: 1pt 0 0;
+      padding-left: 14pt;
+    }
+    .skill {
+      margin: 0 0 2pt;
+    }
+  }
+</style>

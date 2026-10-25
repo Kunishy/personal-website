@@ -1,21 +1,30 @@
 ---
-import { skills } from '../data/resume';
+import { getResume, type Lang } from '../data/resume';
+import { t } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { skills } = getResume(lang);
+const ui = t(lang);
 
 const chipGroups = [
-  { title: '工具與框架', items: skills.tools },
-  { title: '證照', items: skills.others },
-  { title: '興趣與其他', items: skills.hobbies },
+  { title: ui.skillGroups.tools, items: skills.tools },
+  { title: ui.skillGroups.others, items: skills.others },
+  { title: ui.skillGroups.hobbies, items: skills.hobbies },
 ].filter((g) => g.items.length > 0);
 ---
 
-<section id="skills" class="py-10 print:py-2">
+<section id="skills" class="py-10">
   <div class="mx-auto max-w-5xl px-4">
-    <h2 class="mb-5 text-2xl font-bold print:mb-2">技能</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 print:gap-2">
+    <h2 class="mb-5 text-2xl font-bold">{ui.skills}</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         skills.languages.length > 0 && (
-          <div class="card px-5 py-4 print:px-3 print:py-2">
-            <h3 class="mb-3 font-bold">程式語言</h3>
+          <div class="card px-5 py-4">
+            <h3 class="mb-3 font-bold">{ui.skillGroups.languages}</h3>
             {skills.languages.map((s) => (
               <div class="mb-2.5 text-sm">
                 <div class="flex justify-between text-stone-600 dark:text-neutral-400">
@@ -32,7 +41,7 @@ const chipGroups = [
       }
       {
         chipGroups.map((g) => (
-          <div class="card px-5 py-4 print:px-3 print:py-2">
+          <div class="card px-5 py-4">
             <h3 class="mb-3 font-bold">{g.title}</h3>
             <div class="flex flex-wrap gap-2">
               {g.items.map((t) => (

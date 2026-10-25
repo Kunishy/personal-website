@@ -1,23 +1,34 @@
 ---
 import { getCollection } from 'astro:content';
-import { profile } from '../data/resume';
+import { getResume, type Lang } from '../data/resume';
+import { t, localeUrl, otherLang } from '../i18n';
 import { url } from '../utils';
 
-const hasPosts = (await getCollection('blog', ({ data }) => !data.draft)).length > 0;
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { profile } = getResume(lang);
+const ui = t(lang);
+
+// 部落格目前只有中文
+const hasPosts = lang === 'zh' && (await getCollection('blog', ({ data }) => !data.draft)).length > 0;
 
 const links = [
-  { href: url('#about'), label: '關於' },
-  { href: url('#experience'), label: '經歷' },
-  { href: url('#skills'), label: '技能' },
-  { href: url('#projects'), label: '作品' },
-  ...(hasPosts ? [{ href: url('blog/'), label: '文章' }] : []),
-  { href: url('#contact'), label: '聯絡' },
+  { href: localeUrl(lang, '#about'), label: ui.nav.about },
+  { href: localeUrl(lang, '#experience'), label: ui.nav.experience },
+  { href: localeUrl(lang, '#skills'), label: ui.nav.skills },
+  { href: localeUrl(lang, '#projects'), label: ui.nav.projects },
+  ...(hasPosts ? [{ href: url('blog/'), label: ui.nav.blog }] : []),
+  { href: localeUrl(lang, '#contact'), label: ui.nav.contact },
 ];
+const switchLang = otherLang(lang);
 ---
 
 <header class="no-print sticky top-0 z-20 border-b border-stone-200 bg-stone-50/85 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/85">
   <div class="mx-auto flex h-15 max-w-5xl items-center justify-between px-4">
-    <a href={url()} class="font-bold">{profile.name}</a>
+    <a href={localeUrl(lang)} class="font-bold">{profile.name}</a>
 
     <nav
       id="nav-links"
@@ -36,8 +47,18 @@ const links = [
     </nav>
 
     <div class="flex gap-2">
-      <button id="theme-btn" class="btn size-9.5 justify-center p-0" aria-label="切換深淺色">◐</button>
-      <button id="menu-btn" class="btn size-9.5 justify-center p-0 md:hidden" aria-label="開啟選單" aria-expanded="false">☰</button>
+      <a
+        id="lang-switch"
+        href={localeUrl(switchLang)}
+        hreflang={t(switchLang).htmlLang}
+        lang={t(switchLang).htmlLang}
+        class="btn h-9.5 justify-center px-3 text-sm"
+        aria-label={ui.switchLangLabel}
+      >
+        {ui.switchLang}
+      </a>
+      <button id="theme-btn" class="btn size-9.5 justify-center p-0" aria-label={ui.toggleTheme}>◐</button>
+      <button id="menu-btn" class="btn size-9.5 justify-center p-0 md:hidden" aria-label={ui.openMenu} aria-expanded="false">☰</button>
     </div>
   </div>
 </header>
@@ -60,6 +81,12 @@ const links = [
     try {
       localStorage.setItem('theme', dark ? 'dark' : 'light');
     } catch {}
+  });
+
+  // 切換語言時停留在同一個區塊（例如 #projects）
+  const langSwitch = document.getElementById('lang-switch') as HTMLAnchorElement;
+  langSwitch.addEventListener('click', () => {
+    if (location.hash) langSwitch.hash = location.hash;
   });
 
   // 列印時一律用淺色，印完再還原

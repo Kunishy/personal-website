@@ -29,36 +29,22 @@ html {
   scroll-padding-top: 4.5rem;
 }
 
-/* 經歷分頁與作品篩選：只在螢幕上隱藏，紙本上全部展開 */
-@media screen {
-  .screen-hidden {
-    display: none !important;
-  }
+/* 經歷分頁與作品篩選：在螢幕上隱藏未選取的項目 */
+.screen-hidden {
+  display: none !important;
 }
 
-/* 列印：按「下載 PDF」時輸出精簡的 A4 紙本履歷（各元件另有 print: 樣式） */
+/* 列印：首頁會改印 PrintResume 的傳統履歷版型 */
 @page {
   size: A4;
-  margin: 12mm;
+  margin: 15mm 16mm;
 }
 
 @media print {
-  html {
-    font-size: 11px;
-  }
   body {
     background: #fff !important;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
   }
   .no-print {
     display: none !important;
-  }
-  .card {
-    box-shadow: none !important;
-    break-inside: avoid;
-  }
-  h2 {
-    break-after: avoid;
   }
 }

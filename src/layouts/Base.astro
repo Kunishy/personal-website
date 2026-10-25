@@ -1,31 +1,41 @@
 ---
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
-import { profile } from '../data/resume';
+import { getResume, type Lang } from '../data/resume';
+import { t, localeUrl } from '../i18n';
 
 interface Props {
+  lang?: Lang;
   title?: string;
   description?: string;
+  // 有對應的另一個語言版本時（首頁）加上 hreflang 標記
+  alternates?: boolean;
 }
 
-const {
-  title = `${profile.name}｜個人履歷`,
-  description = `${profile.name}的個人網站：履歷、作品集與文章。`,
-} = Astro.props;
+const { lang = 'zh', alternates = false } = Astro.props;
+const { profile } = getResume(lang);
+const ui = t(lang);
+const { title = ui.pageTitle(profile.name), description = ui.pageDescription(profile.name) } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="zh-Hant">
+<html lang={ui.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
+    {
+      alternates &&
+        (['zh', 'en'] as const).map((l) => (
+          <link rel="alternate" hreflang={t(l).htmlLang} href={new URL(localeUrl(l), Astro.site).href} />
+        ))
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <!-- 在畫面繪製前套用深淺色，避免閃爍 -->
@@ -40,12 +50,14 @@ const {
     </script>
   </head>
   <body class="bg-stone-50 font-sans leading-relaxed text-stone-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
-    <Nav />
-    <main id="top">
+    <Nav lang={lang} />
+    <!-- 有提供列印版（slot="print"）的頁面，列印時只印列印版 -->
+    <main id="top" class:list={{ 'print:hidden': Astro.slots.has('print') }}>
       <slot />
     </main>
+    <slot name="print" />
     <footer class="no-print py-10 text-center text-sm text-stone-500 dark:text-neutral-400">
-      © {new Date().getFullYear()} {profile.name} · 以 Astro + Tailwind CSS 打造
+      © {new Date().getFullYear()} {profile.name} · {ui.footer}
     </footer>
   </body>
 </html>

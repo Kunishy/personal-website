@@ -1,8 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { profile } from '../../data/resume';
+import { getResume } from '../../data/resume';
 import { url, formatDate } from '../../utils';
+
+const { profile } = getResume('zh');
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);

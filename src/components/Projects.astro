@@ -1,15 +1,24 @@
 ---
-import { projects, projectCategories } from '../data/resume';
+import { getResume, type Lang } from '../data/resume';
+import { t } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { projects, projectCategories } = getResume(lang);
+const ui = t(lang);
 
 const usedCategories = projectCategories.filter((c) => projects.some((p) => p.category === c.key));
-const filters = [{ key: 'all', label: '全部' }, ...usedCategories];
+const filters = [{ key: 'all', label: ui.all }, ...usedCategories];
 ---
 
-<section id="projects" class="py-10 print:py-2">
+<section id="projects" class="py-10">
   <div class="mx-auto max-w-5xl px-4">
-    <div class="mb-5 flex items-baseline justify-between gap-3 print:mb-2">
-      <h2 class="text-2xl font-bold">作品集</h2>
-      <span class="text-sm text-stone-500 dark:text-neutral-400">精選專案</span>
+    <div class="mb-5 flex items-baseline justify-between gap-3">
+      <h2 class="text-2xl font-bold">{ui.projects}</h2>
+      <span class="text-sm text-stone-500 dark:text-neutral-400">{ui.projectsNote}</span>
     </div>
 
     <div class:list={['no-print mb-4 flex flex-wrap gap-2', { hidden: usedCategories.length < 2 }]}>
@@ -26,12 +35,12 @@ const filters = [{ key: 'all', label: '全部' }, ...usedCategories];
       }
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 print:grid-cols-2 print:gap-2">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         projects.map((p) => (
           <article data-cat={p.category} class="card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
-            <div class={`grid aspect-video place-items-center bg-gradient-to-br text-4xl print:hidden ${p.gradient}`}>{p.icon}</div>
-            <div class="flex flex-1 flex-col gap-2 px-5 pt-4 pb-5 print:gap-1 print:px-3 print:py-2">
+            <div class={`grid aspect-video place-items-center bg-gradient-to-br text-4xl ${p.gradient}`}>{p.icon}</div>
+            <div class="flex flex-1 flex-col gap-2 px-5 pt-4 pb-5">
               <h3 class="text-[1.0625rem] font-bold">{p.title}</h3>
               <p class="flex-1 text-sm text-stone-600 dark:text-neutral-400">{p.description}</p>
               <div class="flex flex-wrap gap-2">{p.tags.map((t) => <span class="chip">{t}</span>)}</div>

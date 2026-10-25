@@ -1,19 +1,28 @@
 ---
-import { work, startups, education, type TimelineItem } from '../data/resume';
+import { getResume, type Lang, type TimelineItem } from '../data/resume';
+import { t } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { work, startups, education } = getResume(lang);
+const ui = t(lang);
 
 const panels = (
   [
-    { key: 'work', label: '工作', items: work },
-    { key: 'startup', label: '學生新創', items: startups },
-    { key: 'edu', label: '學歷', items: education },
+    { key: 'work', label: ui.tabs.work, items: work },
+    { key: 'startup', label: ui.tabs.startup, items: startups },
+    { key: 'edu', label: ui.tabs.edu, items: education },
   ] satisfies { key: string; label: string; items: TimelineItem[] }[]
 ).filter((p) => p.items.length > 0);
 ---
 
-<section id="experience" class="py-10 print:py-2">
+<section id="experience" class="py-10">
   <div class="mx-auto max-w-5xl px-4">
-    <div class="mb-5 flex items-center justify-between gap-3 print:mb-2">
-      <h2 class="text-2xl font-bold">經歷</h2>
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-2xl font-bold">{ui.experience}</h2>
       <div class="no-print inline-flex rounded-xl border border-stone-200 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-900" role="tablist">
         {
           panels.map((p, i) => (
@@ -33,22 +42,20 @@ const panels = (
     {
       panels.map((p, i) => (
         <>
-          {/* 紙本上三個分頁全部展開，用小標題區分 */}
-          <h3 class="mt-2 mb-1.5 hidden text-base font-bold text-blue-600 print:block print:break-after-avoid">{p.label}</h3>
           <ol
             data-tl-panel={p.key}
             class:list={[{ 'screen-hidden': i !== 0 }, 'relative before:absolute before:top-2 before:bottom-2 before:left-[7px] before:w-0.5 before:bg-stone-200 dark:before:bg-neutral-800']}
           >
             {p.items.map((item) => (
-              <li class="relative mb-4 pl-9 before:absolute before:top-[22px] before:left-0 before:size-4 before:rounded-full before:border-[3px] before:border-blue-600 before:bg-white print:mb-1.5 print:pl-7 print:before:top-[12px] dark:before:border-blue-400 dark:before:bg-neutral-950">
-                <div class="card px-5 py-4 print:px-3 print:py-1.5">
+              <li class="relative mb-4 pl-9 before:absolute before:top-[22px] before:left-0 before:size-4 before:rounded-full before:border-[3px] before:border-blue-600 before:bg-white dark:before:border-blue-400 dark:before:bg-neutral-950">
+                <div class="card px-5 py-4">
                 <div class="flex flex-wrap justify-between gap-x-3 gap-y-1">
                   <h3 class="text-[1.0625rem] font-bold">{item.title}</h3>
                   {item.date && <span class="text-sm whitespace-nowrap text-stone-500 dark:text-neutral-400">{item.date}</span>}
                 </div>
                 <p class="mt-0.5 text-[0.9375rem] text-blue-600 dark:text-blue-400">{item.org}</p>
                 {item.points.length > 0 && (
-                  <ul class="mt-2 list-disc pl-5 text-[0.9375rem] text-stone-600 print:mt-0.5 dark:text-neutral-400">
+                  <ul class="mt-2 list-disc pl-5 text-[0.9375rem] text-stone-600 dark:text-neutral-400">
                     {item.points.map((pt) => <li>{pt}</li>)}
                   </ul>
                 )}
